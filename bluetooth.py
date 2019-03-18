@@ -22,6 +22,7 @@ def strip_accents(s):
         return "- - -"
 
 class BluetoothService(object):
+    adapter = None
     bus = None
     player = {"state": None, "artist": None, "title": None}
 
@@ -38,20 +39,20 @@ class BluetoothService(object):
             return False
 
         adapter_path = bluezutils.find_adapter(None).object_path
-        adapter = dbus.Interface(self.bus.get_object(bluezutils.SERVICE_NAME, adapter_path), "org.freedesktop.DBus.Properties")
+        self.adapter = dbus.Interface(self.bus.get_object(bluezutils.SERVICE_NAME, adapter_path), "org.freedesktop.DBus.Properties")
 
         # Power on adapter
-        adapter.Set(bluezutils.ADAPTER_INTERFACE, "Powered", dbus.Boolean(1))
+        self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "Powered", dbus.Boolean(1))
         # Set name to display in available connections
-        adapter.Set(bluezutils.ADAPTER_INTERFACE, "Alias", bluezutils.BT_DEVICE_NAME)
+        self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "Alias", bluezutils.BT_DEVICE_NAME)
         # Set pairable on
-        adapter.Set(bluezutils.ADAPTER_INTERFACE, "Pairable", dbus.Boolean(1))
+        self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "Pairable", dbus.Boolean(1))
         # Set discoverable on
-        adapter.Set(bluezutils.ADAPTER_INTERFACE, "Discoverable", dbus.Boolean(1))
+        self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "Discoverable", dbus.Boolean(1))
         # Set discoverable timeout to 0
-        adapter.Set(bluezutils.ADAPTER_INTERFACE, "DiscoverableTimeout", dbus.UInt32(0))
+        self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "DiscoverableTimeout", dbus.UInt32(0))
         # Set paraible time out to 0
-        adapter.Set(bluezutils.ADAPTER_INTERFACE, "PairableTimeout", dbus.UInt32(0))
+        self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "PairableTimeout", dbus.UInt32(0))
 
         bluezutils.show_adapter_info()
 
@@ -77,6 +78,10 @@ class BluetoothService(object):
 
         self.manager.RequestDefaultAgent(self.path)
 
+        # reconnect automatically to last device
+        if not self.reconnect():
+            print("Unable to connect to last device!")
+
     def device_property_changed(self, property_name, value, path, interface, device_path):
         if property_name != "org.bluez.MediaControl1":
             return
@@ -101,12 +106,22 @@ class BluetoothService(object):
                     f.write(bt_addr)
             except Exception as error: 
                 print("Could not save client address to file")
+
+            # Set pairable off
+            self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "Pairable", dbus.Boolean(0))
+            # Set discoverable off
+            self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "Discoverable", dbus.Boolean(0))
         else:
             print("=====================================")
             print("Device %s disconnected" % bt_addr)
             print("=====================================")
             
             self.onBluetoothConnected_callback(False)
+
+            # Set pairable on
+            self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "Pairable", dbus.Boolean(1))
+            # Set discoverable on
+            self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "Discoverable", dbus.Boolean(1))
 
     def interfaces_removed(self, path, interfaces):
         for iface in interfaces:
