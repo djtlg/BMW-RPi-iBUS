@@ -3,7 +3,7 @@
 import json
 import time
 import threading
-import mqtt_module.client as MQTT # https://pypi.org/project/paho-mqtt/
+import paho.mqtt.client as MQTT # https://pypi.org/project/paho-mqtt/
 									# https://github.com/eclipse/paho.mqtt.python
 
 class MQTTService(object):
