@@ -12,7 +12,7 @@ apt-get update
 apt-get install -y python python-dbus python-gobject-2 python-serial python-paho-mqtt alsa-utils bluez bluez-tools pulseaudio pulseaudio-module-bluetooth
 apt autoremove
 
-echo 
+echo
 echo ===  Creating the user  ===
 echo
 id -u bmw &>/dev/null || useradd bmw --groups bluetooth --create-home
