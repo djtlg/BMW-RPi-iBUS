@@ -4,9 +4,10 @@ Multimedia computer for older BMW cars based on Raspberry Pi
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/W3VJtcYz3fo/0.jpg)](http://www.youtube.com/watch?v=W3VJtcYz3fo)
 
 ## Python dependenties
-python-gobject
-python-serial
-python-dbus
+* python-gobject
+* python-serial
+* python-dbus
+* python-mqtt-paho
 
 ## Operating System
 As this project uses [Raspberry Zero](https://www.raspberrypi.org/products/pi-zero/) I'm gonna utilize Raspbian Jessy Lite distro based on Debian Jessie. 
