@@ -2,8 +2,9 @@
 Description=Pulse Audio
 
 [Service]
+User=pi
 Type=simple
-ExecStart=/usr/bin/pulseaudio --system --disallow-exit --disable-shm --exit-idle-time=-1
+ExecStart=/usr/bin/pulseaudio --disallow-exit --disable-shm --exit-idle-time=-1
 
 [Install]
 WantedBy=multi-user.target
