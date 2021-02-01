@@ -15,7 +15,7 @@ apt autoremove
 echo
 echo "===  Creating \"bmw\" user if doesnt exist  ==="
 echo
-id -u bmw &>/dev/null || useradd bmw --groups bluetooth --create-home
+id -u bmw &>/dev/null || useradd bmw --groups bluetooth --home /opt/bmw-agent --system
 
 echo
 echo "=== Adding \"pulse\" user to \"bluetooth\" group  ==="
