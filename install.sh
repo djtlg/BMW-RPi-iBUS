@@ -28,9 +28,9 @@ echo
 usermod -a -G pulse-access bmw
 
 echo
-echo "=== Adding \"pi\" user to \"pulse-access\" group  ==="
+echo "=== Adding \"bmw\" user to \"dialout\" group  ==="
 echo
-usermod -a -G pulse-access pi
+usermod -a -G dialout bmw
 
 echo
 echo "=== Adding \"root\" user to \"pulse-access\" group  ==="
