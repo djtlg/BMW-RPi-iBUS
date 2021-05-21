@@ -9,7 +9,6 @@ import struct
 import serial
 import threading
 import binascii
-from pip._internal.cli.cmdoptions import _handle_build_dir
 
 # Base on
 # https://github.com/TrentSeed/BMW_E46_Android_RPi_IBUS_Controller
