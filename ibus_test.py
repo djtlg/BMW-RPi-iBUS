@@ -45,7 +45,7 @@ def main():
 def shutdown():
     global ibus
 
-    if ibus.main_thread.isAlive():
+    if ibus.main_thread.is_alive():
         print("Stopping IBUS main thread...")
         ibus.stop()
 

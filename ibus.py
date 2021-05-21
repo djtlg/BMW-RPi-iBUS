@@ -33,7 +33,6 @@ class IBUSService(object):
 
     @property
     def handle(self):
-        #print(self._handle)
         return self._handle
 
     @handle.setter
@@ -178,7 +177,7 @@ class IBUSService(object):
         Writes the provided hex packet(s) to the bus
         """
         try:
-            self.handle.write(hex_value.decode("hex"))
+            self.handle.write(hex_value.encode())
         except Exception as e:
             print("Cannot write to IBUS: " + e.message + "\nDump: " + hex_value)
 
@@ -341,7 +340,6 @@ class IBUSCommands(object):
             else:
                 data = "be" 
             data += ("20" + (binascii.hexlify(str.encode('utf-8'))).decode('utf-8'))#str.encode("hex")
-        print(data)
         packet = IBUSPacket(source_id="c8", 
                             length="{:02x}".format(length), 
                             destination_id="80", data="234232" + data)

@@ -102,7 +102,7 @@ def onBluetoothConnected(state, adapter=None):
     DATA["bluetooth"]["connected"] = state
 
     try:
-        while ibus.display_thread.isAlive():
+        while ibus.display_thread.is_alive():
             ibus.cmd.print_stop()
         ibus.cmd.print_clear()
     except:
@@ -449,7 +449,7 @@ def onPlayerChanged(event_data):
     Finish ongoing display thread
     """
     try:
-        while ibus.display_thread.isAlive():
+        while ibus.display_thread.is_alive():
             ibus.cmd.print_stop()
         ibus.cmd.print_clear()
     except:
@@ -509,17 +509,17 @@ def shutdown():
     
     try:
         print("Stopping RADIO display thread...")
-        while ibus.display_thread.isAlive():
+        while ibus.display_thread.is_alive():
             ibus.cmd.print_stop()
         ibus.cmd.print_clear()
     except:
         pass
 
-    if ibus.main_thread.isAlive():
+    if ibus.main_thread.is_alive():
         print("Stopping IBUS main thread...")
         ibus.stop()
 
-    if mqtt.main_thread.isAlive():
+    if mqtt.main_thread.is_alive():
         print("Stopping MQTT main thread...")
         mqtt.stop()
 
