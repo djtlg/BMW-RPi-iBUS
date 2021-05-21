@@ -4,7 +4,8 @@ import os
 import sys
 import time
 import threading
-from Queue import Queue
+from queue import Queue
+from gi.repository import GLib
 try:
     from gi.repository import GObject
 except ImportError:
@@ -488,7 +489,7 @@ def main():
     mqtt.main_thread.start()
 
     try:
-        mainloop = GObject.MainLoop()
+        mainloop = GLib.MainLoop()
         mainloop.run()
     except KeyboardInterrupt:
         pass

@@ -16,7 +16,7 @@ def show_adapter_info():
     bus = dbus.SystemBus()
     om = dbus.Interface(bus.get_object(SERVICE_NAME, "/"), "org.freedesktop.DBus.ObjectManager")
     objects = om.GetManagedObjects()
-    for path, interfaces in objects.iteritems():
+    for path, interfaces in objects.items():
         if ADAPTER_INTERFACE not in interfaces:
             continue
 
@@ -53,7 +53,7 @@ def find_adapter(pattern=None):
 
 def find_adapter_in_objects(objects, pattern=None):
 	bus = dbus.SystemBus()
-	for path, ifaces in objects.iteritems():
+	for path, ifaces in objects.items():
 		adapter = ifaces.get(ADAPTER_INTERFACE)
 		if adapter is None:
 			continue

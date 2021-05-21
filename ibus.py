@@ -8,6 +8,8 @@ import socket
 import struct
 import serial
 import threading
+import binascii
+from pip._internal.cli.cmdoptions import _handle_build_dir
 
 # Base on
 # https://github.com/TrentSeed/BMW_E46_Android_RPi_IBUS_Controller
@@ -31,13 +33,14 @@ class IBUSService(object):
 
     @property
     def handle(self):
+        #print(self._handle)
         return self._handle
 
     @handle.setter
     def handle(self, value):
         self._handle = value
         if value is not None:
-            self.onIBUSready_callback()
+            self.onIBUSready_callback
 
     def __init__(self, onIBUSready_callback, onIBUSpacket_callback):
         self.onIBUSready_callback = onIBUSready_callback
@@ -59,7 +62,7 @@ class IBUSService(object):
                                         timeout=self.timeout, 
                                         writeTimeout=self.writeTimeout)
         except:
-            print "Cannot access to serial port " + self.port
+            print ("Cannot access to serial port " + self.port)
             return False
 
         """
@@ -154,8 +157,8 @@ class IBUSService(object):
                     packets.append(packet)
 
             except Exception as e:
-                print "Error processing bus dump: " + e.message
-                print "Dump: " + hex_dump
+                print ("Error processing bus dump: " + e.message)
+                print ("Dump: " + hex_dump)
 
             # process packets data
             self.process_packets(packets)
@@ -321,7 +324,7 @@ class IBUSCommands(object):
         if state is None:
             str = str[:RADIO_DISPLAY_SIZE]
             length = len(str) + 5
-            data = str.encode("hex")
+            data = (binascii.hexlify(str.encode('utf-8'))).decode('utf-8') #str.encode("hex")
         elif state == "reverse":
             str = str[:RADIO_DISPLAY_SIZE*2]
             length = (len(str)/2) + 5
@@ -336,9 +339,9 @@ class IBUSCommands(object):
             elif state == "playing":
                 data = "bc"
             else:
-                data = "be"
-            data += "20" + str.encode("hex")
-
+                data = "be" 
+            data += ("20" + (binascii.hexlify(str.encode('utf-8'))).decode('utf-8'))#str.encode("hex")
+        print(data)
         packet = IBUSPacket(source_id="c8", 
                             length="{:02x}".format(length), 
                             destination_id="80", data="234232" + data)
@@ -435,7 +438,7 @@ class IBUSCommands(object):
 
             if data:
                 t = struct.unpack('!12I', data)[10]
-                t -= 2208988800L #1970
+                t -= 2208988800 #1970
                 print("NTP server returned: " + time.ctime(t))
                 d = datetime.datetime.strptime(time.ctime(t), "%a %b %d %H:%M:%S %Y")
 
