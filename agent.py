@@ -522,7 +522,9 @@ def shutdown():
     if mqtt.main_thread.is_alive():
         print("Stopping MQTT main thread...")
         mqtt.stop()
-
+        
+    print("Disconnecting Bluetooth...")
+    bluetooth.disconnect(DATA["bluetooth"]["adapter"])
     print("Destroying IBUS service...")
     ibus.shutdown()
     print("Destroying Bluetooth service...")
