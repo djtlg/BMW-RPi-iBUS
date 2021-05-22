@@ -247,9 +247,8 @@ def onIBUSpacket(packet):
     if packet.source_id == "80" and packet.destination_id == "bf":
         # Ignition status
         if data[0] == "11":
-            if int(data[1], 16) == 0:
-                if DATA["obc"]["ignition"] > int(data[1], 16) and DATA["bluetooth"]["connected"]:
-                    bluetooth.disconnect(DATA["bluetooth"]["adapter"])
+            if int(data[1], 16) == 0 and DATA["obc"]["ignition"] > int(data[1], 16) and DATA["bluetooth"]["connected"]:
+                bluetooth.disconnect(DATA["bluetooth"]["adapter"])
 
             # set new ignition state
             DATA["obc"]["ignition"] = int(data[1], 16)
@@ -319,10 +318,9 @@ def onIBUSpacket(packet):
             return
 
 #    if packet.source_id == "d0" and packet.destination_id == "3f":
-    if packet.source_id == "d0":
-        if data[0] == "a0":
-            DATA["io_status"] = packet.raw
-            return
+    if packet.source_id == "d0" and data[0] == "a0":
+        DATA["io_status"] = packet.raw
+        return
 
     """
     * Handle OBC messages sent from IKE
@@ -379,11 +377,10 @@ def onIBUSpacket(packet):
     """
     RAD Radio
     """
-    if packet.source_id == "68" and packet.destination_id == "3f":
-        if packet.length == "0d": 
-            DATA["radio"]["active"] = True if data[1] == "31" else False
-            print("Radio active: %s" % str(DATA["radio"]["active"]))
-            return
+    if packet.source_id == "68" and packet.destination_id == "3f" and packet.length == "0d": 
+        DATA["radio"]["active"] = True if data[1] == "31" else False
+        print("Radio active: %s" % str(DATA["radio"]["active"]))
+        return
  
     """
     PDC Park Distance Control
@@ -394,25 +391,24 @@ def onIBUSpacket(packet):
         return
 
     # DIAG responce from PDC cointaing information about distance for each sensor
-    if packet.source_id == "60" and packet.destination_id == "3f":
-        if DATA["pdc"]["active"]:
-            DATA["pdc"]["sensor_1"] = int(data[2], 16)
-            DATA["pdc"]["sensor_2"] = int(data[4], 16)
-            DATA["pdc"]["sensor_3"] = int(data[5], 16)
-            DATA["pdc"]["sensor_4"] = int(data[3], 16)
+    if packet.source_id == "60" and packet.destination_id == "3f" and DATA["pdc"]["active"]:
+        DATA["pdc"]["sensor_1"] = int(data[2], 16)
+        DATA["pdc"]["sensor_2"] = int(data[4], 16)
+        DATA["pdc"]["sensor_3"] = int(data[5], 16)
+        DATA["pdc"]["sensor_4"] = int(data[3], 16)
 
-            print("Sensor #1: %d" % DATA["pdc"]["sensor_1"])
-            print("Sensor #2: %d" % DATA["pdc"]["sensor_2"])
-            print("Sensor #3: %d" % DATA["pdc"]["sensor_3"])
-            print("Sensor #4: %d" % DATA["pdc"]["sensor_4"])
-            print("")
+        print("Sensor #1: %d" % DATA["pdc"]["sensor_1"])
+        print("Sensor #2: %d" % DATA["pdc"]["sensor_2"])
+        print("Sensor #3: %d" % DATA["pdc"]["sensor_3"])
+        print("Sensor #4: %d" % DATA["pdc"]["sensor_4"])
+        print("")
 
-            pdc_display_packet = ibus.cmd.get_pdc_display_packet([DATA["pdc"]["sensor_1"],
-                                                                  DATA["pdc"]["sensor_2"],
-                                                                  DATA["pdc"]["sensor_3"],
-                                                                  DATA["pdc"]["sensor_4"]])
-            ibus.send(pdc_display_packet.raw)
-            return
+        pdc_display_packet = ibus.cmd.get_pdc_display_packet([DATA["pdc"]["sensor_1"],
+                                                              DATA["pdc"]["sensor_2"],
+                                                              DATA["pdc"]["sensor_3"],
+                                                              DATA["pdc"]["sensor_4"]])
+        ibus.send(pdc_display_packet.raw)
+        return
 
     # clear all waiting items
     with queue.mutex:
