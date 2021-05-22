@@ -50,7 +50,6 @@ class MQTTService(object):
 					continue
 
 				time.sleep(60)
-				continue
 
 		queue.task_done()
 

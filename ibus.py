@@ -9,6 +9,7 @@ import struct
 import serial
 import threading
 import binascii
+from serial.serialutil import SerialException
 
 # Base on
 # https://github.com/TrentSeed/BMW_E46_Android_RPi_IBUS_Controller
@@ -17,7 +18,7 @@ import binascii
 RADIO_DISPLAY_SIZE = 12
 NTP_SERVER = "pl.pool.ntp.org" # time server
 
-class IBUSService(object):
+class ibus_service(object):
 
     # configuration
     port = "/dev/ttyUSB0"
@@ -27,7 +28,7 @@ class IBUSService(object):
     stopbits = serial.STOPBITS_ONE
     rtscts = True
     timeout = .2
-    writeTimeout = 0
+    writetimeout = 0
     _handle = None
 
     @property
@@ -58,7 +59,7 @@ class IBUSService(object):
                                         stopbits=self.stopbits, 
                                         rtscts=self.rtscts, 
                                         timeout=self.timeout, 
-                                        writeTimeout=self.writeTimeout)
+                                        writeTimeout=self.writetimeout)
         except:
             print ("Cannot access to serial port " + self.port)
             return False
@@ -205,7 +206,6 @@ class IBUSPacket(object):
                     self.destination_id + \
                     self.data + \
                     self.xor_checksum if raw is None else raw
-        return
 
     def is_valid(self):
         """
@@ -301,9 +301,9 @@ class IBUSCommands(object):
 
     ibus = None
 
-    def __init__(self, IBUSService):
-        # instance of IBUSService()
-        self.ibus = IBUSService
+    def __init__(self, ibus_service):
+        # instance of ibus_service()
+        self.ibus = ibus_service
         self._print_stop = threading.Event()
 
     def get_display_packet(self, str=None, state=None):
@@ -320,16 +320,16 @@ class IBUSCommands(object):
         53 - Checksum                           (Last byte is the checksum)
         """
         if state is None:
-            str = str[:RADIO_DISPLAY_SIZE]
-            length = len(str) + 5
-            data = (binascii.hexlify(str.encode('utf-8'))).decode('utf-8') #str.encode("hex")
+            text = str[:RADIO_DISPLAY_SIZE]
+            length = len(text) + 5
+            data = (binascii.hexlify(text.encode('utf-8'))).decode('utf-8')
         elif state == "reverse":
-            str = str[:RADIO_DISPLAY_SIZE*2]
-            length = (len(str)/2) + 5
-            data = str
+            text = str[:RADIO_DISPLAY_SIZE*2]
+            length = (len(text)/2) + 5
+            data = text
         else:
-            str = str[:RADIO_DISPLAY_SIZE-2]
-            length = len(str) + 7
+            text = str[:RADIO_DISPLAY_SIZE-2]
+            length = len(text) + 7
             if state == "connect":
                 data = "c8"
             elif state == "mute":
@@ -338,7 +338,7 @@ class IBUSCommands(object):
                 data = "bc"
             else:
                 data = "be" 
-            data += ("20" + (binascii.hexlify(str.encode('utf-8'))).decode('utf-8'))#str.encode("hex")
+            data += ("20" + (binascii.hexlify(text.encode('utf-8'))).decode('utf-8'))
         packet = IBUSPacket(source_id="c8", 
                             length="{:02x}".format(length), 
                             destination_id="80", data="234232" + data)
