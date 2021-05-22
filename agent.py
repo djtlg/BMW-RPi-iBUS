@@ -128,7 +128,7 @@ def on_bluetooth_connected(state, adapter=None):
         # switch back to FM
         ibus.cmd.request_for_radio_mode_switch()
 
-def onIBUSpacket(packet):
+def on_ibus_packet(packet):
     global DATA
     global queue
 
@@ -472,7 +472,7 @@ def main():
 
     bluetooth = bt_.BluetoothService(on_bluetooth_connected, onPlayerChanged)
 
-    ibus = ibus_.IBUSService(onIBUSready, onIBUSpacket)
+    ibus = ibus_.IBUSService(onIBUSready, on_ibus_packet)
     ibus.cmd = ibus_.IBUSCommands(ibus)
     
     ibus.main_thread = threading.Thread(target=ibus.start)

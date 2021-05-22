@@ -40,9 +40,9 @@ class IBUSService(object):
         if value is not None:
             self.onIBUSready_callback
 
-    def __init__(self, onIBUSready_callback, onIBUSpacket_callback):
+    def __init__(self, onIBUSready_callback, on_ibus_packet_callback):
         self.onIBUSready_callback = onIBUSready_callback
-        self.onIBUSpacket_callback = onIBUSpacket_callback
+        self.on_ibus_packet_callback = on_ibus_packet_callback
         
         self._stop = threading.Event()
 
@@ -166,7 +166,7 @@ class IBUSService(object):
         Process packets []
         """
         while index < len(packets):
-            self.onIBUSpacket_callback(packets[index])
+            self.on_ibus_packet_callback(packets[index])
             del(packets[index])
 
         return True

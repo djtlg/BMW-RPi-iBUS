@@ -16,14 +16,14 @@ ibus = None
 def onIBUSready():
     pass
 
-def onIBUSpacket(packet):
+def on_ibus_packet(packet):
     
     print(packet)
 
 def main():
     global ibus
 
-    ibus = ibus_.IBUSService(onIBUSready, onIBUSpacket)
+    ibus = ibus_.IBUSService(onIBUSready, on_ibus_packet)
     ibus.cmd = ibus_.IBUSCommands(ibus)
     
     ibus.main_thread = threading.Thread(target=ibus.start)
