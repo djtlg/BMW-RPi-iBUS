@@ -95,7 +95,7 @@ def onIBUSready():
     ibus.cmd.request_for_radio_status()
     ibus.cmd.request_for_vin()
 
-def onBluetoothConnected(state, adapter=None):
+def on_bluetooth_connected(state, adapter=None):
     global ibus
     global DATA
 
@@ -470,7 +470,7 @@ def main():
     global queue
     queue = Queue(maxsize=1)
 
-    bluetooth = bt_.BluetoothService(onBluetoothConnected, onPlayerChanged)
+    bluetooth = bt_.BluetoothService(on_bluetooth_connected, onPlayerChanged)
 
     ibus = ibus_.IBUSService(onIBUSready, onIBUSpacket)
     ibus.cmd = ibus_.IBUSCommands(ibus)

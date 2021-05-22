@@ -26,8 +26,8 @@ class BluetoothService(object):
     bus = None
     player = {"state": None, "artist": None, "title": None}
 
-    def __init__(self, onBluetoothConnected_callback, onPlayerChanged_callback):
-        self.onBluetoothConnected_callback = onBluetoothConnected_callback
+    def __init__(self, on_bluetooth_connected_callback, onPlayerChanged_callback):
+        self.on_bluetooth_connected_callback = on_bluetooth_connected_callback
         self.onPlayerChanged_callback = onPlayerChanged_callback
         
         # Get the system bus
@@ -99,7 +99,7 @@ class BluetoothService(object):
             print("==================================")
 
             os.system("pactl set-sink-volume 0 100%")
-            self.onBluetoothConnected_callback(True, bt_addr)
+            self.on_bluetooth_connected_callback(True, bt_addr)
 
             try:
                 with open(LAST_DEVICE, "w") as f:
@@ -116,7 +116,7 @@ class BluetoothService(object):
             print("Device %s disconnected" % bt_addr)
             print("=====================================")
             
-            self.onBluetoothConnected_callback(False)
+            self.on_bluetooth_connected_callback(False)
 
             # Set pairable on
             self.adapter.Set(bluezutils.ADAPTER_INTERFACE, "Pairable", dbus.Boolean(1))
