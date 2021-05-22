@@ -13,7 +13,7 @@ import ibus as ibus_
 
 ibus = None
 
-def onIBUSready():
+def on_ibus_ready():
     pass
 
 def on_ibus_packet(packet):
@@ -23,7 +23,7 @@ def on_ibus_packet(packet):
 def main():
     global ibus
 
-    ibus = ibus_.IBUSService(onIBUSready, on_ibus_packet)
+    ibus = ibus_.IBUSService(on_ibus_ready, on_ibus_packet)
     ibus.cmd = ibus_.IBUSCommands(ibus)
     
     ibus.main_thread = threading.Thread(target=ibus.start)

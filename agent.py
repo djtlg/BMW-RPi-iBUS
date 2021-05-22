@@ -79,7 +79,7 @@ def set_bitmask(xor, bit):
     xor |= bit
     return xor
 
-def onIBUSready():
+def on_ibus_ready():
     ibus.cmd.clown_nose_on()
     
     ibus.cmd.reset_fuel_2()
@@ -472,7 +472,7 @@ def main():
 
     bluetooth = bt_.BluetoothService(on_bluetooth_connected, onPlayerChanged)
 
-    ibus = ibus_.IBUSService(onIBUSready, on_ibus_packet)
+    ibus = ibus_.IBUSService(on_ibus_ready, on_ibus_packet)
     ibus.cmd = ibus_.IBUSCommands(ibus)
     
     ibus.main_thread = threading.Thread(target=ibus.start)

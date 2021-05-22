@@ -38,10 +38,10 @@ class IBUSService(object):
     def handle(self, value):
         self._handle = value
         if value is not None:
-            self.onIBUSready_callback
+            self.on_ibus_ready_callback
 
-    def __init__(self, onIBUSready_callback, on_ibus_packet_callback):
-        self.onIBUSready_callback = onIBUSready_callback
+    def __init__(self, on_ibus_ready_callback, on_ibus_packet_callback):
+        self.on_ibus_ready_callback = on_ibus_ready_callback
         self.on_ibus_packet_callback = on_ibus_packet_callback
         
         self._stop = threading.Event()
