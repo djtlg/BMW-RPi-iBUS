@@ -416,7 +416,7 @@ def on_ibus_packet(packet):
     # propagate to MQTT
     queue.put(DATA["obc"], False)
 
-def onPlayerChanged(event_data):
+def on_player_changed(event_data):
     global DATA
 
     """
@@ -470,7 +470,7 @@ def main():
     global queue
     queue = Queue(maxsize=1)
 
-    bluetooth = bt_.BluetoothService(on_bluetooth_connected, onPlayerChanged)
+    bluetooth = bt_.BluetoothService(on_bluetooth_connected, on_player_changed)
 
     ibus = ibus_.IBUSService(on_ibus_ready, on_ibus_packet)
     ibus.cmd = ibus_.IBUSCommands(ibus)

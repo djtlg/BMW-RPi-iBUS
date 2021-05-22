@@ -26,9 +26,9 @@ class BluetoothService(object):
     bus = None
     player = {"state": None, "artist": None, "title": None}
 
-    def __init__(self, on_bluetooth_connected_callback, onPlayerChanged_callback):
+    def __init__(self, on_bluetooth_connected_callback, on_player_changed_callback):
         self.on_bluetooth_connected_callback = on_bluetooth_connected_callback
-        self.onPlayerChanged_callback = onPlayerChanged_callback
+        self.on_player_changed_callback = on_player_changed_callback
         
         # Get the system bus
         try:
@@ -146,14 +146,14 @@ class BluetoothService(object):
                 self.player["state"] = strip_accents(changed["Status"])
 
                 # call the callback
-                self.onPlayerChanged_callback(self.player)
+                self.on_player_changed_callback(self.player)
             
             if "Track" in changed:
                 self.player["artist"] = strip_accents(changed["Track"]["Artist"]) if "Artist" in changed["Track"] else None
                 self.player["title"] = strip_accents(changed["Track"]["Title"]) if "Title" in changed["Track"] else None
                     
                 # call the callback
-                self.onPlayerChanged_callback(self.player)
+                self.on_player_changed_callback(self.player)
 
     def player_control(self, action):
         iface = dbus.Interface(self.bus.get_object(bluezutils.SERVICE_NAME, self._player_object_path), bluezutils.MEDIAPLAYER_INTERFACE)
