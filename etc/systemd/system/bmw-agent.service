@@ -4,6 +4,7 @@ Description = BMW Agent
 [Service]
 User=bmw
 Type=simple
+KillSignal=SIGINT
 ExecStart=/usr/bin/python -u /opt/bmw-agent/agent.py
 
 [Install]
