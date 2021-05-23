@@ -398,12 +398,12 @@ class IBUSCommands(object):
         return packet
     
     def volume_down(self):
-        for i in range(0, 5):
+        for _ in range(0, 5):
             self.ibus.send("50046832101e")
             time.sleep(0.1)
     
     def volume_up(self):
-        for i in range(0, 4):
+        for _ in range(0, 4):
             self.ibus.send("50046832111f")
             time.sleep(0.1)
         
