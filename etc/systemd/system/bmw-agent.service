@@ -5,7 +5,7 @@ Description = BMW Agent
 User=bmw
 Type=simple
 KillSignal=SIGINT
-ExecStart=/usr/bin/python -u /opt/bmw-agent/agent.py
+ExecStart=/usr/bin/python3 -u /opt/bmw-agent/agent.py
 
 [Install]
 WantedBy=multi-user.target

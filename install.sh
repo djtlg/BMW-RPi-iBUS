@@ -9,7 +9,7 @@ echo
 echo ===  Installing Necessary Packages  ===
 echo
 apt-get update
-apt-get install -y python python-dbus python-gobject-2 python-serial python-paho-mqtt alsa-utils bluez bluez-tools pulseaudio pulseaudio-module-bluetooth ofono
+apt-get install -y python3 python3-dbus python3-gi python3-serial python3-paho-mqtt alsa-utils bluez bluez-tools pulseaudio pulseaudio-module-bluetooth ofono
 apt autoremove
 
 echo

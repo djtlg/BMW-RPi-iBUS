@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import os
 import sys
@@ -79,7 +79,9 @@ class BluetoothService(object):
         self.manager.RequestDefaultAgent(self.path)
 
         # reconnect automatically to last device
-        if not self.reconnect():
+        try:
+            self.reconnect()
+        except:
             print("Unable to connect to last device!")
 
     def device_property_changed(self, property_name, value, path, interface, device_path):
